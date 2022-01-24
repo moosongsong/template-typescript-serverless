@@ -1,0 +1,39 @@
+name: CD-DEV
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  deploy:
+    name: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 14.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+      - name: Install node packages
+        run: npm install
+      - name: Install dependency
+        run: npm i -g serverless
+      - name: Generate Environment Variables
+        run: |
+          echo "STAGE=dev" >> .env.dev
+          echo "SECURITY_GROUP_ID=$SECURITY_GROUP_ID" >> .env.dev
+          echo "SUBNET_ID1=$SUBNET_ID1" >> .env.dev
+          echo "WEB_HOOK_URL_STELLA=$WEB_HOOK_URL_STELLA" >> .env.dev
+        env:
+          SECURITY_GROUP_ID: ${{ secrets.SECURITY_GROUP_ID }}
+          SUBNET_ID1: ${{ secrets.SUBNET_ID1 }}
+          WEB_HOOK_URL_STELLA: ${{ secrets.WEB_HOOK_URL_STELLA }}
+      - name: set credentials
+        run: |
+          serverless config credentials --provider aws --key $KEY_CREDENTIALS --secret $SECRET_CREDENTIALS
+        env:
+          KEY_CREDENTIALS: ${{ secrets.KEY_CREDENTIALS }}
+          SECRET_CREDENTIALS: ${{ secrets.SECRET_CREDENTIALS }}
+      - name: Deploy to dev
+        run: npm run deploy:dev
