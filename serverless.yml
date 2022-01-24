@@ -1,0 +1,32 @@
+service: make-today-fortune
+
+plugins:
+  - serverless-offline
+
+useDotenv: true
+
+frameworkVersion: '2'
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  versionFunctions: true
+  lambdaHashingVersion: 20201221
+  region: ap-northeast-2
+  vpc:
+    securityGroupIds:
+      - ${env:SECURITY_GROUP_ID}
+    subnetIds:
+      - ${env:SUBNET_ID1}
+  environment:
+    WEB_HOOK_URL_STELLA: ${env:WEB_HOOK_URL_STELLA}
+
+functions:
+  hello:
+    handler: handler.hello
+    events:
+      - httpApi:
+          path: /users/create
+          method: get
+#      - schedule: cron(0 19 * * ? *)
+#      - schedule: cron(0 19 ? * MON-FRI *)

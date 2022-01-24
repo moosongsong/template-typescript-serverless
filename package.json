@@ -1,0 +1,38 @@
+{
+  "name": "make-today-fortune",
+  "version": "1.0.0",
+  "description": "this is service for today fortune",
+  "main": "handler.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/moosongsong/make-today-fortune.git"
+  },
+  "keywords": [
+    "fortune"
+  ],
+  "author": "moosongsong",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/moosongsong/make-today-fortune/issues"
+  },
+  "homepage": "https://github.com/moosongsong/make-today-fortune#readme",
+  "devDependencies": {
+    "prettier": "^2.4.1",
+    "serverless": "^2.66.2",
+    "serverless-offline": "^8.2.0",
+    "shx": "^0.3.3"
+  },
+  "dependencies": {
+    "@slack/webhook": "^6.0.0",
+  },
+  "scripts": {
+    "dev": "shx cp ./.env.dev ./.env",
+    "prod": "shx cp ./.env.prod ./.env",
+    "start:dev": "npm run dev && sls offline",
+    "start:prod": "npm run prod && sls offline",
+    "deploy:dev": "shx rm -rf .build/ && npm run dev && sls deploy --stage dev",
+    "deploy:prod": "shx rm -rf .build/ && npm run prod && sls deploy --stage prod",
+    "check:prettier": "prettier -c .",
+    "fix:prettier": "prettier -c --write ."
+  }
+}
